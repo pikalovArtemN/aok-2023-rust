@@ -17,39 +17,37 @@ fn main() -> std::io::Result<()> {
         let prompt_line = line.unwrap();
         let prompt_line = prompt_line.replace("Game ", "");
         let colon_char = prompt_line.find(":").unwrap();
-        let game_number: i32 = prompt_line[0..colon_char].parse().unwrap();
         let prompt_line = &prompt_line[colon_char + 2..];
         let games = prompt_line.split("; ");
-        let mut is_game_exists = true;
-        'game: for game in games{
+
+        let mut max_blue = 0;
+        let mut max_red = 0;
+        let mut max_green = 0;
+
+        for game in games{
             let cubes = game.split(", ");
             for cube in cubes {
                 if cube.contains("blue") {
                     let cube: i32 = cube.replace(" blue", "").parse().unwrap();
-                    if cube > 14 {
-                        is_game_exists = false;
-                        break 'game;
+                    if cube > max_blue {
+                        max_blue = cube;
                     }
                 }
                 if cube.contains("red") {
                     let cube: i32 = cube.replace(" red", "").parse().unwrap();
-                    if cube > 12 {
-                        is_game_exists = false;
-                        break 'game;
+                    if cube > max_red {
+                        max_red = cube;
                     }
                 }
                 if cube.contains("green") {
                     let cube: i32 = cube.replace(" green", "").parse().unwrap();
-                    if cube > 13 {
-                        is_game_exists = false;
-                        break 'game;
+                    if cube > max_green {
+                        max_green = cube;
                     }
                 }
             }
         }
-        if is_game_exists {
-            result += game_number;
-        }
+        result += max_blue * max_red * max_green;
         // let prompt_line = prompt_line.replace("green", "");
         // let prompt_line = prompt_line.replace("red", "");
         // let prompt_line = prompt_line.replace("blue", "");
